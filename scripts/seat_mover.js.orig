@@ -1,0 +1,37 @@
+const path = require('path');
+(require('dotenv')).config({ path: path.resolve(process.cwd(), '../.env') });
+const db = require('../database');
+
+const event = '85a88a12-0f27-4e3f-a04b-c5c0724ca7ab';
+
+const movements = [
+  [['FultonA', 'D1'], ['FultonA', 'E1']],
+  [['FultonA', 'D2'], ['FultonA', 'E2']],
+  [['FultonA', 'D3'], ['FultonA', 'E3']],
+];
+
+(async function() {
+  for(let movement of movements) {
+    const seatIdA = (await db.query('SELECT seat_id FROM seats WHERE tag=$2 AND layout_id=(SELECT layout_id FROM layouts WHERE prefix=$1)', movement[0])).rows[0].seat_id;
+    const seatIdB = (await db.query('SELECT seat_id FROM seats WHERE tag=$2 AND layout_id=(SELECT layout_id FROM layouts WHERE prefix=$1)', movement[1])).rows[0].seat_id;
+    const userInA = (await db.query('SELECT user_id FROM seat_reservations WHERE seat_id=$1 AND event_id=$2', [seatIdA, event])).rows[0].user_id;
+    const userInBQuery = await db.query('SELECT user_id FROM seat_reservations WHERE seat_id=$1 AND event_id=$2', [seatIdB, event]);
+    if(userInBQuery.rowCount == 0) { // no swap needed, just do a direct move
+      console.log(`Direct move ${movement[0]} -> ${movement[1]}`);
+      await db.query('UPDATE seat_reservations SET seat_id=$1 WHERE seat_id=$2 AND event_id=$3', [seatIdB, seatIdA, event]);
+    } else {
+      const userInB = userInBQuery.rows[0].user_id;
+      console.log(`Swap users ${userInA} (in seat ${seatIdA}) and ${userInB} (in seat ${seatIdB})`);
+      // first delete both reservations
+      await db.query('DELETE FROM seat_reservations WHERE seat_id=$1 AND event_id=$2', [seatIdA, event]);
+      await db.query('DELETE FROM seat_reservations WHERE seat_id=$1 AND event_id=$2', [seatIdB, event]);
+      // create new reservation for each user
+      // put user B in seat A
+      // put user A in seat B
+      await db.query('INSERT INTO seat_reservations (seat_id, user_id, event_id) VALUES ($1, $2, $3)', [seatIdA, userInB, event]);
+      await db.query('INSERT INTO seat_reservations (seat_id, user_id, event_id) VALUES ($1, $2, $3)', [seatIdB, userInA, event]);
+    }
+  }
+  return;
+})();
+

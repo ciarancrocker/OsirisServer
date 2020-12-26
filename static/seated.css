@@ -1,0 +1,36 @@
+@import url("https://ciarancrocker.net/fonts/BebasNeue.css");
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+table td, table th {
+  border: 1px solid black;
+}
+
+td, th {
+  padding: 5px;
+}
+
+.boxCentre {
+  margin: 0 auto;
+  width: 400px;
+}
+
+.titleMain {
+  color: #000;
+}
+
+.titleEmphasis {
+  color: #666;
+}

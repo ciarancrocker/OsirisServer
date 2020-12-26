@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ API_URL }}/static/seated.css">
+  </head>
+  <body>
+    <div class='boxCentre'>
+      <h1><span class='titleMain'>Full seat list for</span> <span class='titleEmphasis'>{{ eventName }}</span></h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Room</th>
+            <th>Seat</th>
+            <th>User</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for seat in seats %}
+          <tr>
+            <td>{{seat.prefix}}</td>
+            <td>{{seat.seat}}</td>
+            {% if seat.user == null %}
+            <td>Empty</td>
+            {% else %}
+            <td>{{seat.user}}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

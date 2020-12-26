@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ API_URL }}/static/seat_cards.css">
+  </head>
+  <body>
+    {% for seat in seats %}
+    <div class="seat">
+      <div class="header"><img src="{{ eventBanner }}"/></div>
+      <div class="seatName">Seat {{ seat.prefix }}-{{ seat.seat }}</div>
+      {% if seat.user == null %}
+      <div class="userInfo">Seat available</div>
+      {% else %}
+      <div class="userInfo"><img src="{{ seat.profile }}"/>{{ seat.user }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </body>
+</html>
