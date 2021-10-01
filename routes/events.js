@@ -7,8 +7,11 @@ const r = express.Router(); // eslint-disable-line new-cap
 
 // Get event list
 r.get('/', async function(req, res) {
+  console.log(`Got to start of request`)
   const events = await db.query('SELECT * FROM events ORDER BY sort_override DESC, name ASC');
+  console.log(`Got our data back`);
   res.json(events.rows);
+  console.log(`Sent the data to express`);
 });
 
 // Get event information
