@@ -45,7 +45,7 @@ fs.readdir(path.join(__dirname, 'routes'), function(err, files) {
 
 app.use('/static', express.static('./static'));
 
-const port = process.env.OSIRIS_PORT || 5143;
+const port = process.env.PORT || 5143;
 app.listen(port, function() {
   console.log(`Listening on ${port}`);
 });
