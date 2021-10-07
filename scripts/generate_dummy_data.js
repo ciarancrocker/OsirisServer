@@ -20,5 +20,4 @@ const db = require('../lib/database');
             }
         }
     }
-    await db.close();
 })();
