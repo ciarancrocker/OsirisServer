@@ -21,7 +21,7 @@ r.get('/:eventId', async function(req, res) {
   const eventLayouts = await db.query(
     'SELECT * FROM layouts WHERE layout_id IN (SELECT layout_id FROM event_layouts WHERE event_id=$1) ' +
       'ORDER BY name ASC',
-    [req.params.eventId]
+    [req.params.eventId],
   );
   const returnedEvent = event.rows[0];
   returnedEvent.layouts = eventLayouts.rows || [];
@@ -33,7 +33,7 @@ r.get('/:eventId/layouts/:layoutId', async function(req, res) {
   // check that this event uses this layout
   const eventLayoutCheck = await db.query(
     'SELECT true FROM event_layouts WHERE event_id=$1 AND layout_id=$2',
-    [req.params.eventId, req.params.layoutId]
+    [req.params.eventId, req.params.layoutId],
   );
   if (eventLayoutCheck.rowCount != 1) {
     res.status(404).json({status: 'err', msg: 'event_has_no_such_layout'});
@@ -44,7 +44,7 @@ r.get('/:eventId/layouts/:layoutId', async function(req, res) {
   const seats = await db.query(
     'SELECT a.seat_id,tag,x_pos,y_pos,user_id FROM seats a LEFT JOIN seat_reservations b ON ' +
       '(a.seat_id=b.seat_id AND b.event_id=$1) WHERE layout_id=$2 ORDER BY tag ASC',
-    [req.params.eventId, req.params.layoutId]
+    [req.params.eventId, req.params.layoutId],
   );
   res.json(seats.rows);
 });
@@ -56,7 +56,7 @@ r.get('/:eventId/seat/:seatId', async function(req, res) {
   const seatQuery = await db.query(
     'SELECT a.seat_id, tag, user_id FROM seats a LEFT JOIN seat_reservations b ON ' +
       '(a.seat_id=b.seat_id AND b.event_id=$1) WHERE a.seat_id=$2 LIMIT 1',
-    [eventId, seatId]
+    [eventId, seatId],
   );
 
   if (seatQuery.rowCount === 0) {
@@ -75,7 +75,7 @@ r.put('/:eventId/seat/:seatId', jwtGuard, eventGuard, async function(req, res) {
   try {
     const reservationQuery = await db.query(
       'INSERT INTO seat_reservations (event_id, seat_id, user_id) VALUES ($1,$2,$3) RETURNING *',
-      [eventId, seatId, userId]
+      [eventId, seatId, userId],
     );
     res.json(reservationQuery.rows[0]);
   } catch (e) {
@@ -98,7 +98,7 @@ r.delete('/:eventId/seat/:seatId', jwtGuard, eventGuard, async function(req, res
   // get the reservation to validate ownership
   const reservationQuery = await db.query(
     'SELECT user_id FROM seat_reservations WHERE event_id=$1 AND seat_id=$2',
-    [eventId, seatId]
+    [eventId, seatId],
   );
   if (reservationQuery.rows[0].user_id !== userId) {
     res.status(401).json({status: 'err', msg: 'not_your_reservation'});

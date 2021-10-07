@@ -19,7 +19,7 @@ async function findOrCreateUser(discordId, name, profileUrl) {
   if (userSearch.rowCount === 0) { // there is no user, make one
     const createUserQuery = await db.query(
       'INSERT INTO users (user_id, discord_id, tag, profile_url) VALUES ($1, $2, $3, $4) RETURNING *',
-      [uuid.v4(), discordId, name, profileUrl]
+      [uuid.v4(), discordId, name, profileUrl],
     );
     return createUserQuery.rows[0];
   } else { // they exist, do we need to update them
@@ -78,7 +78,7 @@ r.get('/callback.discord', async function(req, res) {
     // now we get the users information
     const userRequest = new fetch.Request(
       'https://discordapp.com/api/users/@me',
-      {headers: {'Authorization': `Bearer ${token.access_token}`}}
+      {headers: {'Authorization': `Bearer ${token.access_token}`}},
     );
     const userResponse = await fetch(userRequest);
     const user = await userResponse.json();

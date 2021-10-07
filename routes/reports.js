@@ -15,7 +15,7 @@ r.get('/seatCards/:eventId', async function(req, res) {
         'FROM seats a FULL JOIN seat_reservations b ON (a.seat_id=b.seat_id AND b.event_id=$1) ' +
         'FULL JOIN users c ON (b.user_id=c.user_id) JOIN layouts d ON (d.layout_id=a.layout_id) ' +
         'WHERE a.layout_id IN (SELECT layout_id FROM event_layouts WHERE event_id=$1) ORDER BY prefix ASC, seat ASC;',
-      [eventId]
+      [eventId],
     );
 
     const viewInfo = {
@@ -42,7 +42,7 @@ r.get('/seated/:eventId', async function(req, res) {
         'full join seat_reservations b on (a.seat_id=b.seat_id and b.event_id=$1) ' +
         'full join users c on (b.user_id=c.user_id) join layouts d on (d.layout_id=a.layout_id) ' +
         'where a.layout_id in (select layout_id from event_layouts where event_id=$1) order by prefix asc, seat asc;',
-      [eventId]
+      [eventId],
     );
 
     const viewInfo = {

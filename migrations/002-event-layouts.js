@@ -9,7 +9,7 @@ module.exports.up = async function() {
     'PRIMARY KEY (event_id, layout_id), ' +
     'FOREIGN KEY (event_id) REFERENCES events(event_id), ' +
     'FOREIGN KEY (layout_id) REFERENCES layouts(layout_id)' +
-    ')'
+    ')',
   );
   await c.release();
 };

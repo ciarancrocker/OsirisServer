@@ -16,7 +16,7 @@ module.exports.up = async function() {
     'tag CHARACTER VARYING NOT NULL, ' +
     'profile_url CHARACTER VARYING NOT NULL, ' +
     'PRIMARY KEY (user_id) ' +
-    ')'
+    ')',
   );
   await c.query('CREATE TABLE IF NOT EXISTS events (' +
     'event_id UUID NOT NULL, ' +
@@ -24,14 +24,14 @@ module.exports.up = async function() {
     'read_only BOOLEAN NOT NULL DEFAULT FALSE, ' +
     'header_image CHARACTER VARYING, ' +
     'PRIMARY KEY (event_id)' +
-    ')'
+    ')',
   );
   await c.query('CREATE TABLE IF NOT EXISTS layouts (' +
     'layout_id UUID NOT NULL, ' +
     'name CHARACTER VARYING NOT NULL, ' +
     'prefix CHARACTER VARYING NOT NULL, ' +
     'PRIMARY KEY (layout_id) ' +
-    ')'
+    ')',
   );
   await c.query('CREATE TABLE IF NOT EXISTS seats (' +
     'seat_id UUID NOT NULL, ' +
@@ -41,7 +41,7 @@ module.exports.up = async function() {
     'y_pos REAL NOT NULL, ' +
     'PRIMARY KEY (seat_id), ' +
     'FOREIGN KEY (layout_id) REFERENCES layouts(layout_id)' +
-    ')'
+    ')',
   );
   await c.query('CREATE TABLE IF NOT EXISTS seat_reservations (' +
     'seat_id UUID NOT NULL, ' +
@@ -53,7 +53,7 @@ module.exports.up = async function() {
     'FOREIGN KEY (seat_id) REFERENCES seats(seat_id), ' +
     'FOREIGN KEY (event_id) REFERENCES events(event_id), ' +
     'FOREIGN KEY (user_id) REFERENCES users(user_id)' +
-    ')'
+    ')',
   );
   await c.query('COMMIT');
   await c.release();
