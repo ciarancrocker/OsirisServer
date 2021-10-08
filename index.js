@@ -1,7 +1,6 @@
 'use strict';
 
 (require('dotenv')).config();
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const fs = require('fs');
@@ -20,7 +19,7 @@ app.set('trust proxy', 'loopback');
 
 app.use(morgan('combined'));
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // load all the route files from routes/
 fs.readdir(path.join(__dirname, 'routes'), function(err, files) {
